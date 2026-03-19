@@ -16,7 +16,7 @@ jobs:
         id: tag_version
         with:
           command: bump
-          args: --auto --no-changelog
+          args: --auto --disable-bump-commit
           git-user: "Codeberg Action"
           git-user-email: "actions@codeberg.org"
 
