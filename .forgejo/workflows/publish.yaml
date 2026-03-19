@@ -1,6 +1,5 @@
 name: Publish
 on: [push]
-
 permissions:
   contents: write
 
@@ -9,21 +8,27 @@ jobs:
     runs-on: codeberg-small
     steps:
       - uses: actions/checkout@v6
-      - name: Bump version and push tag
-        id: tag_version
-        uses: https://github.com/mathieudutour/github-tag-action@v6.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        uses: cocogitto/cocogitto-action@v4
+        id: tag_version
+        with:
+          command: bump
+          args: --auto --no-changelog
+          git-user: "Codeberg Action"
+          git-user-email: "actions@codeberg.org"
 
       - name: Setup bun
-        if: ${{ steps.tag_version.outputs.release_type != '' }}
+        if: ${{ steps.tag_version.outputs.version != '' }}
         uses: https://github.com/oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Build and publish to NPM
-        if: ${{ steps.tag_version.outputs.release_type != '' }}
+        if: ${{ steps.tag_version.outputs.version != '' }}
         run: |
-          echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.release_version }}"')" > package.json
+          echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.version }}"')" > package.json
           bun run build
           bun run publish
