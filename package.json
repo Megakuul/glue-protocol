@@ -1,0 +1,32 @@
+{
+  "name": "glue-protocol",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun run build.ts",
+    "publish": "bun publish --access public"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "./dist"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsdown": "^0.21.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.11.0",
+    "@bufbuild/protovalidate": "^1.1.1",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-web": "^2.1.1"
+  }
+}
