@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Bump version and push tag
-        uses: cocogitto/cocogitto-action@v4
+        uses: https://github.com/cocogitto/cocogitto-action@v4
         id: tag_version
         with:
           command: bump
