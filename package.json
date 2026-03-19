@@ -1,5 +1,5 @@
 {
-  "name": "glue-protocol",
+  "name": "@megakuul/glue-protocol",
   "module": "index.ts",
   "type": "module",
   "scripts": {

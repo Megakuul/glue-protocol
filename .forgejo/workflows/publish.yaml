@@ -3,6 +3,8 @@ on: [push]
 jobs:
   build:
     runs-on: docker
+    container:
+      image: ubuntu:resolute
     steps:
       - uses: actions/checkout@v6
       - name: Bump version and push tag
@@ -20,7 +22,6 @@ jobs:
       - name: Build and publish to NPM
         if: ${{ steps.tag_version.outputs.release_type != '' }}
         run: |
-          export NPM_TOKEN=${{ secrets.NPM_TOKEN }}
           echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.release_version }}"')" > package.json
           bun run build
           bun run publish
