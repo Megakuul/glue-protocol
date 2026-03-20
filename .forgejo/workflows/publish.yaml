@@ -11,7 +11,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Bump version and push tag
+      - name: Bump version
         uses: https://github.com/cocogitto/cocogitto-action@v4
         id: tag_version
         with:
@@ -19,6 +19,10 @@ jobs:
           args: --auto --disable-bump-commit
           git-user: "Codeberg Action"
           git-user-email: "actions@codeberg.org"
+
+      - name: Push tag
+        if: ${{ steps.tag_version.outputs.version != '' }}
+        run: git push origin ${{ steps.tag_version.outputs.version }}
 
       - name: Setup bun
         if: ${{ steps.tag_version.outputs.version != '' }}
@@ -29,6 +33,7 @@ jobs:
       - name: Build and publish to NPM
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.version }}"')" > package.json
           bun install
           bun run build
