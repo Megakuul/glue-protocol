@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "bun run build.ts",
-    "publish": "bun publish --access public"
+    "release": "bun publish --access public"
   },
   "types": "./dist/index.d.ts",
   "exports": {

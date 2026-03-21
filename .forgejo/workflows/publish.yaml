@@ -37,4 +37,4 @@ jobs:
           echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.version }}"')" > package.json
           bun install
           bun run build
-          bun run publish
+          bun run release
