@@ -82,7 +82,7 @@ That's it now you can deploy this in every possible way 🎉 Here some inspirati
 - Run SvelteKit in a container and horizontally scale some Go microservices 🎛️
 
 
-Here you can find an [example](https://codeberg.org/megakuul/cloudjam) 🚀
+Here you can find an [example](https://github.com/megakuul/cloudjam) 🚀
 
 
 > [!IMPORTANT]  

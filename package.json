@@ -1,6 +1,6 @@
 {
   "name": "@megakuul/glue-protocol",
-  "repository": "git://codeberg.org/megakuul/glue-protocol.git",
+  "repository": "git://github.com/megakuul/glue-protocol.git",
   "license": "MIT",
   "module": "index.ts",
   "type": "module",

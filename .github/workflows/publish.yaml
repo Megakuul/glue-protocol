@@ -1,14 +1,21 @@
 name: Publish
 on: [push]
+env:
+  PNPM_CONFIG_FROZEN_LOCKFILE: "true"
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+  CI: "true"
 permissions:
   contents: write
 jobs:
   build:
-    runs-on: [codeberg-tiny, codeberg-small, codeberg-medium]
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Setup nix
+        if: ${{ steps.tag_version.outputs.version != '' }}
+        uses: DeterminateSystems/nix-installer-action@v14
       - name: Bump version
         uses: https://github.com/cocogitto/cocogitto-action@v4
         id: tag_version
@@ -20,16 +27,11 @@ jobs:
       - name: Push tag
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: git push origin ${{ steps.tag_version.outputs.version }}
-      - name: Setup bun
-        if: ${{ steps.tag_version.outputs.version != '' }}
-        uses: https://github.com/oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
       - name: Build and publish to NPM
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.version }}"')" > package.json
-          bun install
-          bun run build
-          bun run release
+          nix develop --command pnpm i
+          nix develop --command pnpm run build
+          nix develop --command pnpm run release
