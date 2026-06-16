@@ -2,15 +2,13 @@ name: Publish
 on: [push]
 permissions:
   contents: write
-
 jobs:
   build:
-    runs-on: codeberg-small
+    runs-on: [codeberg-tiny, codeberg-small, codeberg-medium]
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
       - name: Bump version
         uses: https://github.com/cocogitto/cocogitto-action@v4
         id: tag_version
@@ -19,17 +17,14 @@ jobs:
           args: --auto --disable-bump-commit
           git-user: "Codeberg Action"
           git-user-email: "actions@codeberg.org"
-
       - name: Push tag
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: git push origin ${{ steps.tag_version.outputs.version }}
-
       - name: Setup bun
         if: ${{ steps.tag_version.outputs.version != '' }}
         uses: https://github.com/oven-sh/setup-bun@v2
         with:
           bun-version: latest
-
       - name: Build and publish to NPM
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: |
