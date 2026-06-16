@@ -5,8 +5,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "bun run build.ts",
-    "release": "bun publish --access public"
+    "build": "node build.js",
+    "release": "node publish --access public"
   },
   "types": "./dist/index.d.mts",
   "exports": {
@@ -19,7 +19,6 @@
     "./dist"
   ],
   "devDependencies": {
-    "@types/bun": "latest",
     "tsdown": "^0.21.4"
   },
   "peerDependencies": {

@@ -20,7 +20,7 @@ import type { Interceptor } from '@connectrpc/connect';
 import { createGlue } from './glue/glue.svelte';
 import { UserService } from './sdk/v1/admin/user/user_pb'; // your connectrpc service
 
-const glue = createGlue(
+const Glue = createGlue(
 	'/api',
   // the client provided to the interceptor factory is the service with the key 'auth'.
 	(client): Interceptor => {
@@ -38,8 +38,30 @@ const glue = createGlue(
 
 Now import this global instance anywhere in your Svelte project to access the backend:
 
-```typescript
+```svelte
+<script lang="ts">
+    import { Glue } from '$lib'; // replace $lib with the location of the glue created above.
+	import { UserSchema, type User } from '$lib/sdk/v1/admin/user_pb'; // your protobuf schema
+	import { TextField } from 'svelte-ux'; // just an example
 
+    let user: User = $state({ /* ... */ });
+
+    async function submit() {
+        try {
+            await Glue.user.update(create(UpdateRequestSchema, { mod: user }));
+        } catch (err: any) {
+            // handle the error somehow
+        }
+    }
+</script>
+
+<form onsubmit={() => submit()}>
+    <TextField
+        bind:value={user.username}
+        label="Username"
+        error={Glue.Validate(UserSchema, user).violation.username}
+    />
+</form>
 ```
 
 ## Gobus
