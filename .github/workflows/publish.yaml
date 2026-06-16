@@ -17,7 +17,7 @@ jobs:
         if: ${{ steps.tag_version.outputs.version != '' }}
         uses: DeterminateSystems/nix-installer-action@v14
       - name: Bump version
-        uses: https://github.com/cocogitto/cocogitto-action@v4
+        uses: cocogitto/cocogitto-action@v4
         id: tag_version
         with:
           command: bump
