@@ -6,6 +6,7 @@ env:
   CI: "true"
 permissions:
   contents: write
+  id-token: write
 jobs:
   build:
     runs-on: "ubuntu-latest"
@@ -14,7 +15,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup nix
-        if: ${{ steps.tag_version.outputs.version != '' }}
         uses: DeterminateSystems/nix-installer-action@v14
       - name: Bump version
         uses: cocogitto/cocogitto-action@v4
@@ -30,7 +30,6 @@ jobs:
       - name: Build and publish to NPM
         if: ${{ steps.tag_version.outputs.version != '' }}
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           echo "$(cat package.json | jq '.version = "${{ steps.tag_version.outputs.version }}"')" > package.json
           nix develop --command pnpm i
           nix develop --command pnpm run build
