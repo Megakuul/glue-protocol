@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "release": "node publish --access public"
+    "release": "pnpm publish --access public"
   },
   "types": "./dist/index.d.mts",
   "exports": {
